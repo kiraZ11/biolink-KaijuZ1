@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import ShareButton from '@/components/ShareButton';
 
 // Helper function buat dapetin class tombol berdasarkan setting database
 const getButtonStyle = (style: string) => {
@@ -197,6 +198,10 @@ export default async function Home() {
               <p className="text-gray-500 text-sm">Belum ada link yang ditambahkan.</p>
             </div>
           )}
+
+          <div className="pb-4">
+            <ShareButton username={user.username} />
+          </div>
 
           {/* Footer */}
           <div className="pb-4 pt-10 text-center">

@@ -47,7 +47,7 @@ export default async function Home() {
           {links?.map((link) => (
             <a
               key={link.id}
-              href={link.url}
+              href={`/api/click?url=${encodeURIComponent(link.url)}&id=${link.id}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full"

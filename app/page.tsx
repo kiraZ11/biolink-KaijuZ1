@@ -72,13 +72,13 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 mesh-bg text-slate-800">
 
-      {/* Glassmorphic Container */}
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/50 relative z-10 transition-all duration-500 hover:shadow-white/20">
+      {/* Container (Solid White Body for cleanliness) */}
+      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/50 relative z-10 transition-all duration-500 hover:shadow-white/20">
 
-        {/* Header Section */}
-        <div className={`relative ${themeClasses.header} p-8 pb-12 text-center transition-all duration-500 overflow-hidden`}>
+        {/* 1. Header Section (Gradient) */}
+        <div className={`relative ${themeClasses.header} p-8 pb-32 text-center transition-all duration-500`}>
 
-          {/* Decorative Circles in Header */}
+          {/* Decorative Circles */}
           <div className="absolute top-[-50%] left-[-20%] w-60 h-60 bg-white/10 rounded-full blur-3xl animated-float"></div>
           <div className="absolute bottom-[-20%] right-[-10%] w-40 h-40 bg-black/5 rounded-full blur-2xl animated-float delay-1000"></div>
 
@@ -105,10 +105,26 @@ export default async function Home() {
               {user.bio}
             </p>
           </div>
+
+          {/* 2. Wave Separator (Absolute Bottom Overlay) */}
+          <div className="absolute bottom-0 left-0 right-0 z-20 w-full leading-[0]">
+            <svg className="w-full h-12 sm:h-24 fill-white drop-shadow-[0_-5px_15px_rgba(0,0,0,0.1)]" viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+              <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+              </defs>
+              <g className="parallax">
+                <use xlinkHref="#gentle-wave" x="48" y="0" className="opacity-70 animate-[wave_25s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="3" className="opacity-50 animate-[wave_20s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="5" className="opacity-30 animate-[wave_15s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="7" className="animate-[wave_10s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
+              </g>
+            </svg>
+          </div>
         </div>
 
-        {/* Links Section */}
-        <div className="px-6 py-8 space-y-5 -mt-6 relative z-20">
+
+        {/* 3. Links Section (Solid White matching Wave) */}
+        <div className="bg-white px-6 pb-8 pt-0 space-y-5 min-h-[300px] relative z-20">
 
           {links?.map((link, index) => (
             <a
@@ -164,20 +180,20 @@ export default async function Home() {
             </div>
           )}
 
-        </div>
+          {/* Footer */}
+          <div className="pb-4 pt-10 text-center">
+            <a
+              href="https://github.com/username/biolink-affiliate"
+              target="_blank"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors bg-gray-50 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm"
+            >
+              <span>⚡</span> Powered by <span className={`bg-clip-text text-transparent ${themeClasses.button}`}>BioCatalog</span>
+            </a>
+          </div>
 
-        {/* Footer */}
-        <div className="pb-8 pt-2 text-center">
-          <a
-            href="https://github.com/username/biolink-affiliate"
-            target="_blank"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors bg-gray-50 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm"
-          >
-            <span>⚡</span> Powered by <span className={`bg-clip-text text-transparent ${themeClasses.button}`}>BioCatalog</span>
-          </a>
         </div>
 
       </div>
-    </main>
+    </main >
   );
 }

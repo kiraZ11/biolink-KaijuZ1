@@ -25,6 +25,16 @@
       background-position: 200% 200%;
     }
   }
+
+  @keyframes wave {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 /* Custom Mesh Background */

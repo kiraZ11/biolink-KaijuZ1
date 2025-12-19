@@ -116,18 +116,22 @@ export default async function Home() {
                 <g className="parallax">
                   <g>
                     <use xlinkHref="#gentle-wave" x="48" y="0" className="opacity-70" />
+                    <use xlinkHref="#gentle-wave" x="224" y="0" className="opacity-70" />
                     <animateTransform attributeName="transform" type="translate" from="0 0" to="-176 0" dur="25s" repeatCount="indefinite" />
                   </g>
                   <g>
                     <use xlinkHref="#gentle-wave" x="48" y="3" className="opacity-50" />
+                    <use xlinkHref="#gentle-wave" x="224" y="3" className="opacity-50" />
                     <animateTransform attributeName="transform" type="translate" from="0 0" to="-176 0" dur="20s" repeatCount="indefinite" />
                   </g>
                   <g>
                     <use xlinkHref="#gentle-wave" x="48" y="5" className="opacity-30" />
+                    <use xlinkHref="#gentle-wave" x="224" y="5" className="opacity-30" />
                     <animateTransform attributeName="transform" type="translate" from="0 0" to="-176 0" dur="15s" repeatCount="indefinite" />
                   </g>
                   <g>
                     <use xlinkHref="#gentle-wave" x="48" y="7" />
+                    <use xlinkHref="#gentle-wave" x="224" y="7" />
                     <animateTransform attributeName="transform" type="translate" from="0 0" to="-176 0" dur="10s" repeatCount="indefinite" />
                   </g>
                 </g>

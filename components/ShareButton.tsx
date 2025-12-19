@@ -1,6 +1,6 @@
 'use client'; // Wajib ada karena ini interaktif (pake useState)
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
 export default function ShareButton({ username }: { username: string }) {
@@ -11,6 +11,16 @@ export default function ShareButton({ username }: { username: string }) {
     useEffect(() => {
         setUrl(window.location.href);
     }, []);
+
+    // Optimization: Memoize QR & Reduce complexity (Level L) for faster mobile rendering
+    const memorizedQr = useMemo(() => (
+        <QRCodeSVG
+            value={url}
+            size={160}
+            level="L"
+            className="rounded-lg"
+        />
+    ), [url]);
 
     return (
         <div className="flex flex-col items-center gap-4 mt-6 w-full">
@@ -37,17 +47,13 @@ export default function ShareButton({ username }: { username: string }) {
             {/* Area QR Code (Expand/Collapse Animation w/ CSS Grid) */}
             <div className={`
                 grid transition-[grid-template-rows,opacity,transform] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]
+                will-change-[grid-template-rows,opacity,transform] transform-gpu translate-z-0
                 ${showQR ? 'grid-rows-[1fr] opacity-100 scale-100' : 'grid-rows-[0fr] opacity-0 scale-95 pointer-events-none'}
             `}>
                 <div className="overflow-hidden">
                     <div className="bg-white p-5 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col items-center gap-3 mx-4 my-2 transform transition-all">
                         <div className="p-2 bg-white rounded-xl border border-dashed border-gray-200">
-                            <QRCodeSVG
-                                value={url}
-                                size={160}
-                                level="M"
-                                className="rounded-lg"
-                            />
+                            {memorizedQr}
                         </div>
                         <div className="text-center">
                             <p className="text-xs font-semibold text-gray-800">Scan to visit</p>

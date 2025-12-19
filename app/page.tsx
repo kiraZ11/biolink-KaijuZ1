@@ -113,10 +113,10 @@ export default async function Home() {
                 <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
               </defs>
               <g className="parallax">
-                <use xlinkHref="#gentle-wave" x="48" y="0" className="opacity-70 animate-[wave_25s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
-                <use xlinkHref="#gentle-wave" x="48" y="3" className="opacity-50 animate-[wave_20s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
-                <use xlinkHref="#gentle-wave" x="48" y="5" className="opacity-30 animate-[wave_15s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
-                <use xlinkHref="#gentle-wave" x="48" y="7" className="animate-[wave_10s_cubic-bezier(0.55,0.5,0.45,0.5)_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="0" className="opacity-70 animate-[wave_25s_linear_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="3" className="opacity-50 animate-[wave_20s_linear_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="5" className="opacity-30 animate-[wave_15s_linear_infinite]" />
+                <use xlinkHref="#gentle-wave" x="48" y="7" className="animate-[wave_10s_linear_infinite]" />
               </g>
             </svg>
           </div>

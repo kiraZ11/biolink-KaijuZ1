@@ -50,14 +50,6 @@ export default function ShareButton({ username }: { username: string }) {
                 size={160}
                 level="L"
                 className="rounded-lg"
-                imageSettings={{
-                    src: "", // Optional: Bisa tambah logo di tengah kalau mau
-                    x: undefined,
-                    y: undefined,
-                    height: 24,
-                    width: 24,
-                    excavate: true,
-                }}
             />
         );
     }, [url]);

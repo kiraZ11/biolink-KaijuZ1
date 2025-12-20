@@ -1,3 +1,5 @@
+
+// Colors
 {
   "colors": {
     "primary": "#fbbf24",
@@ -37,6 +39,7 @@
   }
 }
 
+// Layout
 {
   "layout": "bento",
   "colors": { ... }
@@ -46,3 +49,6 @@
   "layout": "minimal",
   "colors": { ... }
 }
+
+// Entrance Effect
+ "entrance_effect": "sword_slash",

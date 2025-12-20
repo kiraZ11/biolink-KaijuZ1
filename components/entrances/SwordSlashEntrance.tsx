@@ -1,88 +1,170 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SwordSlashEntrance() {
     const [isVisible, setIsVisible] = useState(true);
-    const [isSlashing, setIsSlashing] = useState(false);
+    const [stage, setStage] = useState<'idle' | 'slashing' | 'collapsing'>('idle');
+    const [slashLines, setSlashLines] = useState<{ x1: string, y1: string, x2: string, y2: string, delay: number }[]>([]);
+    const [shards, setShards] = useState<{ clip: string, x: number, y: number, r: number, delay: number, left: string, top: string }[]>([]);
+
+    useEffect(() => {
+        // 1. Generate 13 Dramatic Cross-Cuts (Mobile Safe)
+        const lines = Array.from({ length: 13 }).map((_, i) => {
+            // Pick a start side: 0=Top, 1=Right, 2=Bottom, 3=Left
+            const startSide = Math.floor(Math.random() * 4);
+            let endSide = (startSide + 2) % 4; // Default to opposite side
+
+            // 30% chance to cut to adjacent side (Diagonal corner cut), 70% opposite
+            if (Math.random() > 0.7) {
+                endSide = (startSide + 1) % 4;
+            }
+
+            const getCoord = (side: number) => {
+                const offset = Math.random() * 100;
+                switch (side) {
+                    case 0: return { x: `${offset}%`, y: '-10%' }; // Top
+                    case 1: return { x: '110%', y: `${offset}%` }; // Right
+                    case 2: return { x: `${offset}%`, y: '110%' }; // Bottom
+                    case 3: return { x: '-10%', y: `${offset}%` }; // Left
+                    default: return { x: '0%', y: '0%' };
+                }
+            };
+
+            const start = getCoord(startSide);
+            const end = getCoord(endSide);
+
+            return {
+                x1: start.x, y1: start.y,
+                x2: end.x, y2: end.y,
+                delay: i * 0.12
+            };
+        });
+        setSlashLines(lines);
+
+        // 2. Generate Shards (Responsive Grid)
+        // Adjust grid size to be smaller percentages to look good on both
+        const tempShards = [];
+        const rows = 4;
+        const cols = 4;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                // Triangle 1
+                tempShards.push({
+                    clip: `polygon(0 0, 100% 0, 0 100%)`,
+                    left: `${c * 25}%`, top: `${r * 25}%`,
+                    x: (Math.random() - 0.5) * 300, // Bigger explosion X
+                    y: Math.random() * 300 + 100,    // Longer fall
+                    r: (Math.random() - 0.5) * 360,
+                    delay: Math.random() * 0.2
+                });
+                // Triangle 2
+                tempShards.push({
+                    clip: `polygon(100% 0, 100% 100%, 0 100%)`,
+                    left: `${c * 25}%`, top: `${r * 25}%`,
+                    x: (Math.random() - 0.5) * 300,
+                    y: Math.random() * 300 + 100,
+                    r: (Math.random() - 0.5) * 360,
+                    delay: Math.random() * 0.2
+                });
+            }
+        }
+        setShards(tempShards);
+
+    }, []);
 
     const handleStart = () => {
-        setIsSlashing(true);
-        setTimeout(() => {
-            setIsVisible(false);
-        }, 800); // Wait for animation to finish before unmounting
+        setStage('slashing');
+        setTimeout(() => setStage('collapsing'), 1800);
+        setTimeout(() => setIsVisible(false), 3500);
     };
 
     if (!isVisible) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] cursor-pointer" onClick={handleStart}>
+        <div className="fixed inset-0 z-[100] cursor-pointer bg-transparent" onClick={stage === 'idle' ? handleStart : undefined}>
+
+            {/* Start Screen Label */}
             <AnimatePresence>
-                {!isSlashing && (
+                {stage === 'idle' && (
                     <motion.div
-                        className="absolute inset-0 bg-black flex flex-col items-center justify-center text-white z-20"
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                        className="absolute inset-0 bg-black z-20 flex items-center justify-center p-4"
                     >
-                        <motion.h1
-                            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+                        <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.02, 1] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                            className="text-xl font-bold tracking-[0.5em] uppercase hover:text-red-500 transition-colors"
+                            className="border border-white/30 px-8 py-4 bg-black/50 backdrop-blur-sm"
                         >
-                            Click to Start
-                        </motion.h1>
+                            <h1 className="text-white text-xl md:text-3xl font-bold tracking-[0.3em] uppercase text-center">
+                                Initialize
+                            </h1>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* The Slashing Panels */}
-            {isSlashing && (
-                <>
-                    {/* Top Left Panel - Slides Up/Left */}
-                    <motion.div
-                        initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 0)' }}
-                        animate={{ x: '-100%', y: '-100%' }}
-                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute inset-0 bg-black z-10"
-                        style={{ clipPath: 'polygon(0 0, 150% 0, 0 100%)' }} // Custom diagonal cut
-                    />
+            {/* Shards */}
+            {stage === 'collapsing' && (
+                <div className="absolute inset-0 z-20 overflow-hidden pointer-events-none">
+                    {shards.map((shard, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute bg-black w-[26%] h-[26%] border-[0.5px] border-white/20"
+                            style={{ left: shard.left, top: shard.top, clipPath: shard.clip }}
+                            initial={{ x: 0, y: 0, rotate: 0 }}
+                            animate={{
+                                x: shard.x, y: shard.y, rotate: shard.r,
+                                opacity: 0, scale: 0.2
+                            }}
+                            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                        />
+                    ))}
+                </div>
+            )}
 
-                    {/* Bottom Right Panel - Slides Down/Right */}
-                    <motion.div
-                        initial={{ clipPath: 'polygon(100% 100%, 0 100%, 0 0, 100% 100%)' }}
-                        animate={{ x: '100%', y: '100%' }}
-                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute inset-0 bg-black z-10"
-                        style={{ clipPath: 'polygon(100% 100%, -50% 100%, 100% 0)' }} // Custom diagonal cut
-                    />
+            {/* BG */}
+            {stage !== 'collapsing' && <div className="absolute inset-0 bg-black z-10 pointer-events-none" />}
 
-                    {/* The Slash Line Flash */}
-                    <motion.div
-                        initial={{ pathLength: 0, opacity: 1 }}
-                        animate={{ pathLength: 1, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="absolute inset-0 z-30 pointer-events-none"
-                    >
-                        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {/* Slash Lines (Persist into collapsing to prevent gap) */}
+            {(stage === 'slashing' || stage === 'collapsing') && (
+                <div className="absolute inset-0 z-30 pointer-events-none filter drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">
+                    <svg className="w-full h-full" style={{ overflow: 'visible' }}>
+                        {slashLines.map((line, i) => (
                             <motion.line
-                                x1="0" y1="100" // Bottom Left
-                                x2="100" y2="0" // Top Right
-                                stroke="white"
-                                strokeWidth="0.5"
-                                initial={{ pathLength: 0 }}
-                                animate={{ pathLength: 1 }}
+                                key={i}
+                                x1={line.x1} y1={line.y1}
+                                x2={line.x2} y2={line.y2}
+                                stroke="white" strokeWidth="1.5"
+                                strokeLinecap="square"
+                                initial={{ pathLength: 0, opacity: 0 }}
+                                animate={stage === 'collapsing'
+                                    ? { opacity: 0 }
+                                    : { pathLength: 1.2, opacity: 1 }
+                                }
+                                transition={stage === 'collapsing'
+                                    ? { duration: 0.2 }
+                                    : {
+                                        delay: i * 0.08, // Compressed delay for faster sequence
+                                        duration: 0.2,
+                                        ease: "circOut"
+                                    }
+                                }
                             />
-                        </svg>
-                    </motion.div>
+                        ))}
+                    </svg>
 
-                    {/* Flash Effect */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-white z-40 pointer-events-none mix-blend-overlay"
-                    />
-                </>
+                    {/* Screen Color Flash (Synced with slashes only) */}
+                    {stage === 'slashing' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.2, 0] }} // Subtle flash
+                            transition={{ duration: 1.2, times: [0, 0.5, 1] }} // Ends before pause
+                            className="absolute inset-0 z-40 bg-white mix-blend-overlay"
+                        />
+                    )}
+                </div>
             )}
         </div>
     );

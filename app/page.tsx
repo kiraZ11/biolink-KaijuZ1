@@ -1,7 +1,10 @@
 import { supabase } from '@/lib/supabase';
 import { unstable_cache } from 'next/cache';
 import ProfileHeader from '@/components/profile/ProfileHeader';
-import LinksSection from '@/components/profile/LinksSection';
+import LinksSection from '@/components/profile/LinksSection'; // Classic Layout
+import BentoLayout from '@/components/layouts/BentoLayout';
+import MinimalLayout from '@/components/layouts/MinimalLayout';
+import SwordSlashEntrance from '@/components/entrances/SwordSlashEntrance';
 import Footer from '@/components/profile/Footer';
 import { Profile, Link, ThemeColor, ButtonStyle } from '@/types/database';
 import { generateThemeStyles } from '@/lib/themeGenerator';
@@ -75,6 +78,8 @@ export default async function Home() {
   // Generate Dynamic CSS based on Profile
   const themeStyles = generateThemeStyles(profile);
 
+  console.log('DEBUG: Design Config:', JSON.stringify(profile.design_config, null, 2));
+
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 mesh-bg text-slate-800"
@@ -84,9 +89,28 @@ export default async function Home() {
       {/* Container (Solid White Body) */}
       <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/50 relative z-10 transition-all duration-500 hover:shadow-white/20">
 
+        {/* Cinematic Entrance Layer */}
+        {profile.design_config?.entrance_effect === 'sword_slash' && (
+          <SwordSlashEntrance />
+        )}
+
         <ProfileHeader profile={profile} />
 
-        <LinksSection links={linksData} profile={profile} />
+        {/* Dynamic Layout Engine */}
+        {(() => {
+          const layout = profile.design_config?.layout || 'classic';
+          console.log('Current Layout:', layout); // Debug
+
+          switch (layout) {
+            case 'bento':
+              return <BentoLayout links={linksData} profile={profile} />;
+            case 'minimal':
+              return <MinimalLayout links={linksData} profile={profile} />;
+            case 'classic':
+            default:
+              return <LinksSection links={linksData} profile={profile} />;
+          }
+        })()}
 
         <Footer profile={profile} />
 

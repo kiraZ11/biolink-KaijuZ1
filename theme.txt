@@ -37,3 +37,12 @@
   }
 }
 
+{
+  "layout": "bento",
+  "colors": { ... }
+}
+
+{
+  "layout": "minimal",
+  "colors": { ... }
+}

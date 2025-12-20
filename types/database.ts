@@ -11,6 +11,8 @@ export interface Profile {
     theme_color: ThemeColor;
     button_style: ButtonStyle;
     design_config?: {
+        layout?: 'classic' | 'bento' | 'minimal';
+        entrance_effect?: 'none' | 'sword_slash';
         colors?: {
             primary?: string;
             background?: string;
@@ -21,7 +23,7 @@ export interface Profile {
             button?: string;
             card?: string;
         };
-    } | null;
+    };
 }
 
 export interface Link {

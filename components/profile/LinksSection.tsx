@@ -31,11 +31,12 @@ export default function LinksSection({ links, profile }: LinksSectionProps) {
         >
 
             {/* Nebula Clouds (Background Layer for Void Theme) */}
+            {/* Nebula Clouds (Background Layer for Void Theme) - Optimized with Radial Gradients (No Blur Filter) */}
             {profile.design_config?.entrance_effect === 'void' && (
-                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                    <div className="absolute top-[10%] left-[-20%] w-[80%] h-64 bg-purple-900/20 blur-[80px] rounded-full animate-[float_15s_ease-in-out_infinite]" />
-                    <div className="absolute bottom-[20%] right-[-10%] w-[60%] h-64 bg-indigo-900/20 blur-[90px] rounded-full animate-[float_18s_ease-in-out_infinite_5s]" />
-                    <div className="absolute top-[40%] left-[30%] w-[40%] h-40 bg-pink-900/10 blur-[100px] rounded-full animate-[pulse_8s_ease-in-out_infinite]" />
+                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 transform-gpu">
+                    <div className="absolute top-[10%] left-[-20%] w-[80%] h-64 bg-[radial-gradient(circle,rgba(88,28,135,0.3)_0%,transparent_70%)] rounded-full animate-[float_15s_ease-in-out_infinite] translate-z-0" />
+                    <div className="absolute bottom-[20%] right-[-10%] w-[60%] h-64 bg-[radial-gradient(circle,rgba(49,46,129,0.3)_0%,transparent_70%)] rounded-full animate-[float_18s_ease-in-out_infinite_5s] translate-z-0" />
+                    <div className="absolute top-[40%] left-[30%] w-[40%] h-40 bg-[radial-gradient(circle,rgba(131,24,67,0.2)_0%,transparent_70%)] rounded-full animate-[pulse_8s_ease-in-out_infinite] translate-z-0" />
                 </div>
             )}
 

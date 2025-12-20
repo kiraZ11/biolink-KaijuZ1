@@ -32,7 +32,7 @@ export default function ProfileHeader({ profile }: ProfileHeaderProps) {
     return (
         <div
             ref={ref}
-            className={`relative p-8 pb-32 text-center transition-all duration-500 overflow-hidden ${isVoid ? 'text-white' : ''}`}
+            className={`relative p-8 pb-32 text-center transition-all duration-500 overflow-hidden transform-gpu ${isVoid ? 'text-white' : ''}`}
             style={headerStyle}
         >
 

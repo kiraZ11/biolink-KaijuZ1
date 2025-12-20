@@ -60,7 +60,7 @@ export default function ClientPage({ profile, links, themeStyles }: ClientPagePr
                 },
                 transition: {
                     duration: 1.5,
-                    ease: [0.16, 1, 0.3, 1] // Exposure easing
+                    ease: [0.16, 1, 0.3, 1] as const // Type as readonly tuple for Framer Motion
                 }
             };
         }
@@ -69,7 +69,7 @@ export default function ClientPage({ profile, links, themeStyles }: ClientPagePr
         return {
             initial: { opacity: 0, scale: 1.1, filter: "blur(10px)" },
             animate: { opacity: 1, scale: 1, filter: "blur(0px)" },
-            transition: { duration: 0.8, ease: "easeOut" }
+            transition: { duration: 0.8, ease: "easeOut" as const }
         };
     };
 

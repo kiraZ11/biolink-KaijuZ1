@@ -42,22 +42,25 @@ export default function ShareButton({ username }: { username: string }) {
     };
 
     // Optimization: Memoize QR
-    const memorizedQr = useMemo(() => (
-        <QRCodeSVG
-            value={url}
-            size={160}
-            level="L"
-            className="rounded-lg"
-            imageSettings={{
-                src: "", // Optional: Bisa tambah logo di tengah kalau mau
-                x: undefined,
-                y: undefined,
-                height: 24,
-                width: 24,
-                excavate: true,
-            }}
-        />
-    ), [url]);
+    const memorizedQr = useMemo(() => {
+        if (!url) return null;
+        return (
+            <QRCodeSVG
+                value={url}
+                size={160}
+                level="L"
+                className="rounded-lg"
+                imageSettings={{
+                    src: "", // Optional: Bisa tambah logo di tengah kalau mau
+                    x: undefined,
+                    y: undefined,
+                    height: 24,
+                    width: 24,
+                    excavate: true,
+                }}
+            />
+        );
+    }, [url]);
 
     return (
         <div className="flex flex-col items-center gap-4 mt-8 w-full max-w-sm mx-auto px-4">

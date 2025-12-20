@@ -1,7 +1,6 @@
 'use client';
 
 import { Profile } from '@/types/database';
-import { getThemeClasses } from '@/lib/theme';
 import WaveSeparator from './WaveSeparator';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
@@ -11,7 +10,6 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ profile }: ProfileHeaderProps) {
-    const themeClasses = getThemeClasses(profile.theme_color);
     const ref = useRef(null);
 
     const { scrollYProgress } = useScroll({
@@ -25,7 +23,11 @@ export default function ProfileHeader({ profile }: ProfileHeaderProps) {
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
     return (
-        <div ref={ref} className={`relative ${themeClasses.header} p-8 pb-32 text-center transition-all duration-500 overflow-hidden`}>
+        <div
+            ref={ref}
+            className="relative p-8 pb-32 text-center transition-all duration-500 overflow-hidden"
+            style={{ backgroundColor: 'var(--primary)' }}
+        >
 
             {/* Decorative Circles with Parallax */}
             <motion.div style={{ y: yBg }} className="absolute top-[-50%] left-[-20%] w-60 h-60 bg-white/10 rounded-full blur-3xl animated-float" />
@@ -36,27 +38,38 @@ export default function ProfileHeader({ profile }: ProfileHeaderProps) {
                 className="relative z-10 flex flex-col items-center"
             >
                 {/* Avatar with Ring */}
-                <div className={`
+                <div className="
            w-28 h-28 rounded-full p-1 bg-white/20 backdrop-blur-sm shadow-xl 
-           ring-4 ${themeClasses.ring} ring-offset-4 ring-offset-transparent
+           ring-4 ring-primary-foreground/30 ring-offset-4 ring-offset-transparent
            mb-4 overflow-hidden transform transition-transform hover:scale-105 duration-300
-        `}>
+        ">
                     <div className="w-full h-full bg-gray-100 rounded-full overflow-hidden relative">
                         {profile.avatar_url ? (
                             <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                         ) : (
-                            <div className={`w-full h-full flex items-center justify-center text-4xl font-bold text-white ${themeClasses.button}`}>
+                            <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-primary bg-primary-foreground">
                                 {profile.full_name?.charAt(0) || '?'}
                             </div>
                         )}
                     </div>
                 </div>
 
-                <motion.div style={{ y: yText }}>
+                <motion.div style={{ y: yText }} className="flex flex-col items-center">
                     <h1 className="text-white text-3xl font-bold tracking-tight drop-shadow-sm">{profile.full_name}</h1>
                     <p className="text-white/95 text-sm mt-2 font-medium bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">
                         {profile.bio}
                     </p>
+
+                    {/* vCard Button */}
+                    <motion.a
+                        href={`/api/vcard?username=${profile.username}`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="mt-4 flex items-center gap-2 px-4 py-2 bg-white/10 text-white text-xs font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        Save Contact
+                    </motion.a>
                 </motion.div>
             </motion.div>
 

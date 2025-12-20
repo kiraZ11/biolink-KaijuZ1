@@ -4,6 +4,7 @@ import ProfileHeader from '@/components/profile/ProfileHeader';
 import LinksSection from '@/components/profile/LinksSection';
 import Footer from '@/components/profile/Footer';
 import { Profile, Link, ThemeColor, ButtonStyle } from '@/types/database';
+import { generateThemeStyles } from '@/lib/themeGenerator';
 
 // Cache Database Queries (1 Hour Cache to save Supabase Quota)
 const getProfile = unstable_cache(
@@ -11,8 +12,8 @@ const getProfile = unstable_cache(
     const { data } = await supabase.from('profile').select('*').single();
     return data;
   },
-  ['profile-data'],
-  { revalidate: 3600, tags: ['profile'] }
+  ['profile-data-v2'], // Cache busting
+  { revalidate: 1, tags: ['profile'] }
 );
 
 const getLinks = unstable_cache(
@@ -24,11 +25,39 @@ const getLinks = unstable_cache(
       .order('sort_order', { ascending: true });
     return data;
   },
-  ['links-data'],
-  { revalidate: 3600, tags: ['links'] }
+  ['links-data-v2'], // Cache busting
+  { revalidate: 1, tags: ['links'] }
 );
 
-export const revalidate = 3600; // Page level revalidation backup
+export const revalidate = 1; // Page level revalidation backup
+
+// Generate Dynamic Metadata
+export async function generateMetadata() {
+  const profile = await getProfile();
+
+  const title = profile?.full_name
+    ? `${profile.full_name} | Bio Link`
+    : 'Bio Link Pro';
+
+  const description = profile?.bio || 'Check out my links!';
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      images: profile?.avatar_url ? [profile.avatar_url] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: profile?.avatar_url ? [profile.avatar_url] : [],
+    }
+  };
+}
 
 export default async function Home() {
   const [profileData, linksData] = await Promise.all([getProfile(), getLinks()]);
@@ -43,8 +72,14 @@ export default async function Home() {
     avatar_url: null
   };
 
+  // Generate Dynamic CSS based on Profile
+  const themeStyles = generateThemeStyles(profile);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 mesh-bg text-slate-800">
+    <main
+      className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 mesh-bg text-slate-800"
+      style={themeStyles}
+    >
 
       {/* Container (Solid White Body) */}
       <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/50 relative z-10 transition-all duration-500 hover:shadow-white/20">

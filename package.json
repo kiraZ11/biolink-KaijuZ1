@@ -16,7 +16,8 @@
     "qrcode.react": "^4.2.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "vcard-creator": "^0.7.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

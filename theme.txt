@@ -1,0 +1,39 @@
+{
+  "colors": {
+    "primary": "#fbbf24",
+    "background": "#000000",
+    "cardBg": "#171717",
+    "cardBorder": "#404040"
+  },
+  "shapes": {
+    "button": "4px",
+    "card": "8px"
+  }
+}
+
+{
+  "colors": {
+    "primary": "#ec4899",
+    "background": "#fff1f2",
+    "cardBg": "#ffffff",
+    "cardBorder": "#fbcfe8"
+  },
+  "shapes": {
+    "button": "9999px",
+    "card": "2rem"
+  }
+}
+
+{
+  "colors": {
+    "primary": "#00ff9d",
+    "background": "#0a0a0a",
+    "cardBg": "#111111",
+    "cardBorder": "#00ff9d"
+  },
+  "shapes": {
+    "button": "0px",
+    "card": "0px"
+  }
+}
+

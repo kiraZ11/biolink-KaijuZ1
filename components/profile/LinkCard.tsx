@@ -1,7 +1,6 @@
 'use client';
 
 import { Link, Profile } from '@/types/database';
-import { getThemeClasses, getButtonStyle } from '@/lib/theme';
 import { motion, useMotionTemplate, useMotionValue, useSpring, Variants } from 'framer-motion';
 import { MouseEvent } from 'react';
 
@@ -21,9 +20,6 @@ const cardVariants: Variants = {
 };
 
 export default function LinkCard({ link, profile }: LinkCardProps) {
-    const themeClasses = getThemeClasses(profile.theme_color);
-    const buttonStyleClass = getButtonStyle(profile.button_style);
-
     // 3D Tilt Logic
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -63,24 +59,29 @@ export default function LinkCard({ link, profile }: LinkCardProps) {
             whileHover={{ scale: 1.02, z: 50 }}
             whileTap={{ scale: 0.98 }}
         >
-            <div className={`
-        relative w-full py-4 px-6 flex items-center gap-4 font-semibold transition-colors duration-300
-        ${buttonStyleClass}
-        
-        ${link.is_highlighted
-                    ? `${themeClasses.button} text-white shadow-xl shadow-${profile.theme_color}-500/30 border border-white/20 hover:shadow-2xl hover:shadow-${profile.theme_color}-500/40`
-                    : 'bg-white border border-gray-100 text-gray-700 group-hover:border-gray-300 shadow-md group-hover:shadow-lg group-hover:bg-gray-50'
-                }
-      `}>
+            <div
+                className={`
+                    relative w-full py-4 px-6 flex items-center gap-4 font-semibold transition-colors duration-300
+                    rounded-button
+                    ${link.is_highlighted ? 'text-primary-foreground shadow-xl' : 'shadow-md hover:bg-gray-50'}
+                `}
+                style={{
+                    backgroundColor: link.is_highlighted ? 'var(--primary)' : 'var(--card-bg)',
+                    borderColor: link.is_highlighted ? 'rgba(255,255,255,0.2)' : 'var(--card-border)',
+                    color: link.is_highlighted ? 'var(--primary-foreground)' : 'var(--card-foreground)',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                }}
+            >
 
                 {/* Icon Container */}
-                <span className={`
-          flex items-center justify-center w-10 h-10 rounded-full text-lg shadow-sm
-          ${link.is_highlighted
-                        ? 'bg-white/20 text-white backdrop-blur-md'
-                        : `bg-gray-100 ${themeClasses.text}`
-                    }
-        `}>
+                <span
+                    className={`flex items-center justify-center w-10 h-10 rounded-full text-lg shadow-sm backdrop-blur-md`}
+                    style={{
+                        backgroundColor: link.is_highlighted ? 'rgba(255,255,255,0.2)' : '#f3f4f6',
+                        color: link.is_highlighted ? '#ffffff' : 'var(--primary)'
+                    }}
+                >
                     {link.is_highlighted ? '🔥' : '🔗'}
                 </span>
 
@@ -95,7 +96,7 @@ export default function LinkCard({ link, profile }: LinkCardProps) {
 
                 {/* Shine Effect for Highlighted */}
                 {link.is_highlighted && (
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 rounded-button overflow-hidden pointer-events-none">
                         <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 animate-[shine_3s_infinite]"></div>
                     </div>
                 )}

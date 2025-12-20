@@ -10,6 +10,18 @@ export interface Profile {
     avatar_url: string | null;
     theme_color: ThemeColor;
     button_style: ButtonStyle;
+    design_config?: {
+        colors?: {
+            primary?: string;
+            background?: string;
+            cardBg?: string;
+            cardBorder?: string;
+        };
+        shapes?: {
+            button?: string;
+            card?: string;
+        };
+    } | null;
 }
 
 export interface Link {

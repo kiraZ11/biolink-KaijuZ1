@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+  /* Semantic Color Mapping */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-background-page: var(--background-page);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+
+  /* Semantic Shape Mapping */
+  --radius-button: var(--radius-button);
+  --radius-card: var(--radius-card);
+
+  /* Animations */
   --animate-float: float 6s ease-in-out infinite;
   --animate-shine: shine 3s linear infinite;
 
@@ -25,23 +37,33 @@
       background-position: 200% 200%;
     }
   }
-
-  @keyframes wave {
-    0% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-50%);
-    }
-  }
 }
 
-/* Custom Mesh Background */
+/* Default Theme (Blue Modern) */
+:root {
+  /* Blue 600 */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  /* Slate 900 */
+  --background-page: #0f172a;
+
+  /* White */
+  --card-bg: #ffffff;
+  --card-border: #f1f5f9;
+
+  /* Shapes */
+  --radius-button: 1rem;
+  /* rounded-2xl */
+  --radius-card: 1.5rem;
+  /* rounded-3xl */
+}
+
+/* Custom Mesh Background that uses the Page Background variable */
 .mesh-bg {
-  background-color: #0f172a;
+  background-color: var(--background-page);
   background-image:
-    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.4) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, rgba(var(--primary-rgb), 0.4) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.4) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.4) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.4) 0px, transparent 50%);

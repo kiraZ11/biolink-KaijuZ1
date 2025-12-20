@@ -1,29 +1,75 @@
+'use client';
+
 import { Link, Profile } from '@/types/database';
 import { getThemeClasses, getButtonStyle } from '@/lib/theme';
+import { motion, useMotionTemplate, useMotionValue, useSpring, Variants } from 'framer-motion';
+import { MouseEvent } from 'react';
 
 interface LinkCardProps {
     link: Link;
     profile: Profile;
 }
 
+const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { type: 'spring', stiffness: 200, damping: 20 }
+    },
+};
+
 export default function LinkCard({ link, profile }: LinkCardProps) {
     const themeClasses = getThemeClasses(profile.theme_color);
     const buttonStyleClass = getButtonStyle(profile.button_style);
 
+    // 3D Tilt Logic
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
+    const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
+
+    function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+        const { left, top, width, height } = currentTarget.getBoundingClientRect();
+        const xPct = (clientX - left) / width - 0.5;
+        const yPct = (clientY - top) / height - 0.5;
+        x.set(xPct);
+        y.set(yPct);
+    }
+
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
+    const rotateX = useMotionTemplate`${mouseY.get() * -20}deg`;
+    const rotateY = useMotionTemplate`${mouseX.get() * 20}deg`;
+
     return (
-        <a
+        <motion.a
             href={`/api/click?url=${encodeURIComponent(link.url)}&id=${link.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full group"
+            className="block w-full group perspective-1000"
+            variants={cardVariants}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+            }}
+            whileHover={{ scale: 1.02, z: 50 }}
+            whileTap={{ scale: 0.98 }}
         >
             <div className={`
-        relative w-full py-4 px-6 flex items-center gap-4 font-semibold transition-all duration-300 transform hover:-translate-y-1
+        relative w-full py-4 px-6 flex items-center gap-4 font-semibold transition-colors duration-300
         ${buttonStyleClass}
         
         ${link.is_highlighted
                     ? `${themeClasses.button} text-white shadow-xl shadow-${profile.theme_color}-500/30 border border-white/20 hover:shadow-2xl hover:shadow-${profile.theme_color}-500/40`
-                    : 'bg-white border border-gray-100 text-gray-700 hover:border-gray-300 hover:shadow-lg hover:bg-gray-50'
+                    : 'bg-white border border-gray-100 text-gray-700 group-hover:border-gray-300 shadow-md group-hover:shadow-lg group-hover:bg-gray-50'
                 }
       `}>
 
@@ -54,6 +100,6 @@ export default function LinkCard({ link, profile }: LinkCardProps) {
                     </div>
                 )}
             </div>
-        </a>
+        </motion.a>
     );
 }

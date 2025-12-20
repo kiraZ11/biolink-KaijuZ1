@@ -1,6 +1,10 @@
+'use client';
+
 import { Profile } from '@/types/database';
 import { getThemeClasses } from '@/lib/theme';
 import WaveSeparator from './WaveSeparator';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 
 interface ProfileHeaderProps {
     profile: Profile;
@@ -8,15 +12,29 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ profile }: ProfileHeaderProps) {
     const themeClasses = getThemeClasses(profile.theme_color);
+    const ref = useRef(null);
+
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"]
+    });
+
+    const yText = useTransform(scrollYProgress, [0, 1], [0, 100]);
+    const yAvatar = useTransform(scrollYProgress, [0, 1], [0, 50]);
+    const yBg = useTransform(scrollYProgress, [0, 1], [0, -50]);
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
     return (
-        <div className={`relative ${themeClasses.header} p-8 pb-32 text-center transition-all duration-500`}>
+        <div ref={ref} className={`relative ${themeClasses.header} p-8 pb-32 text-center transition-all duration-500 overflow-hidden`}>
 
-            {/* Decorative Circles */}
-            <div className="absolute top-[-50%] left-[-20%] w-60 h-60 bg-white/10 rounded-full blur-3xl animated-float"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-40 h-40 bg-black/5 rounded-full blur-2xl animated-float delay-1000"></div>
+            {/* Decorative Circles with Parallax */}
+            <motion.div style={{ y: yBg }} className="absolute top-[-50%] left-[-20%] w-60 h-60 bg-white/10 rounded-full blur-3xl animated-float" />
+            <motion.div style={{ y: yBg }} className="absolute bottom-[-20%] right-[-10%] w-40 h-40 bg-black/5 rounded-full blur-2xl animated-float delay-1000" />
 
-            <div className="relative z-10 flex flex-col items-center">
+            <motion.div
+                style={{ y: yAvatar, opacity }}
+                className="relative z-10 flex flex-col items-center"
+            >
                 {/* Avatar with Ring */}
                 <div className={`
            w-28 h-28 rounded-full p-1 bg-white/20 backdrop-blur-sm shadow-xl 
@@ -34,11 +52,13 @@ export default function ProfileHeader({ profile }: ProfileHeaderProps) {
                     </div>
                 </div>
 
-                <h1 className="text-white text-3xl font-bold tracking-tight drop-shadow-sm">{profile.full_name}</h1>
-                <p className="text-white/95 text-sm mt-2 font-medium bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">
-                    {profile.bio}
-                </p>
-            </div>
+                <motion.div style={{ y: yText }}>
+                    <h1 className="text-white text-3xl font-bold tracking-tight drop-shadow-sm">{profile.full_name}</h1>
+                    <p className="text-white/95 text-sm mt-2 font-medium bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">
+                        {profile.bio}
+                    </p>
+                </motion.div>
+            </motion.div>
 
             <WaveSeparator />
         </div>

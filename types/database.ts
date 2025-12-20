@@ -12,7 +12,7 @@ export interface Profile {
     button_style: ButtonStyle;
     design_config?: {
         layout?: 'classic' | 'bento' | 'minimal';
-        entrance_effect?: 'none' | 'sword_slash';
+        entrance_effect?: 'none' | 'sword_slash' | 'void';
         colors?: {
             primary?: string;
             background?: string;

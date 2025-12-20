@@ -60,12 +60,13 @@ export default function ShareButton({ username }: { username: string }) {
             {/* Main Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
+                style={{ backgroundColor: 'var(--card-bg)', color: 'var(--card-foreground)', borderColor: 'var(--card-border)' }}
                 className={`
-                    group relative flex items-center justify-center gap-3 px-8 py-3.5 rounded-full 
+                    group relative flex items-center justify-center gap-3 px-8 py-3.5 rounded-full border
                     transition-all duration-300 transform active:scale-95
                     ${isOpen
-                        ? 'bg-gray-900 text-white shadow-xl shadow-gray-500/20 ring-2 ring-gray-900 ring-offset-2'
-                        : 'bg-white text-gray-700 shadow-lg shadow-gray-200/50 border border-gray-100 hover:shadow-xl hover:border-gray-200'
+                        ? 'shadow-xl ring-2 ring-primary ring-offset-2'
+                        : 'shadow-lg hover:shadow-xl'
                     }
                 `}
             >
@@ -100,7 +101,10 @@ export default function ShareButton({ username }: { username: string }) {
                 ${isOpen ? 'grid-rows-[1fr] opacity-100 scale-100' : 'grid-rows-[0fr] opacity-0 scale-95 pointer-events-none'}
             `}>
                 <div className="overflow-hidden">
-                    <div className="bg-white p-5 rounded-[2rem] shadow-xl shadow-gray-200/60 border border-gray-100 flex flex-col gap-5 mt-2 mx-1">
+                    <div
+                        className="p-5 rounded-[2rem] shadow-xl border flex flex-col gap-5 mt-2 mx-1"
+                        style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--card-border)' }}
+                    >
 
                         {/* Action Buttons Row */}
                         <div className="grid grid-cols-2 gap-3">

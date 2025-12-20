@@ -15,6 +15,33 @@
   /* Animations */
   --animate-float: float 6s ease-in-out infinite;
   --animate-shine: shine 3s linear infinite;
+  --animate-horizon-pulse: horizon-pulse 4s ease-in-out infinite;
+  --animate-accretion-spin: accretion-spin 20s linear infinite;
+
+  @keyframes horizon-pulse {
+
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: scaleX(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: scaleX(1.1);
+      filter: brightness(1.5);
+    }
+  }
+
+  @keyframes accretion-spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
   @keyframes float {
 
@@ -55,8 +82,15 @@
   /* Shapes */
   --radius-button: 1rem;
   /* rounded-2xl */
-  --radius-card: 1.5rem;
   /* rounded-3xl */
+
+  /* Default Gradients (Vibrant) */
+  --gradient-1: rgba(236, 72, 153, 0.4);
+  /* Pink */
+  --gradient-2: rgba(99, 102, 241, 0.4);
+  /* Indigo */
+  --gradient-3: rgba(139, 92, 246, 0.4);
+  /* Violet */
 }
 
 /* Custom Mesh Background that uses the Page Background variable */
@@ -64,9 +98,9 @@
   background-color: var(--background-page);
   background-image:
     radial-gradient(at 0% 0%, rgba(var(--primary-rgb), 0.4) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.4) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.4) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.4) 0px, transparent 50%);
+    radial-gradient(at 100% 0%, var(--gradient-1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, var(--gradient-2) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, var(--gradient-3) 0px, transparent 50%);
   background-size: 150% 150%;
   animation: mesh-move 15s ease infinite alternate;
 }

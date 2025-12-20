@@ -7,6 +7,11 @@ export interface ThemeConfig {
     cardBg: string;
     radiusButton: string;
     radiusCard: string;
+    gradients?: {
+        g1: string;
+        g2: string;
+        g3: string;
+    }
 }
 
 // Preset Themes that map nicely to our new CSS Variables
@@ -60,6 +65,18 @@ export const THEME_PRESETS: Record<string, ThemeConfig> = {
         radiusButton: '0px',
         radiusCard: '0px',
     },
+    cosmic: {
+        primary: '#a855f7', // purple-500
+        background: '#0a0a0a', // neutral-950 (Void Black)
+        cardBg: '#171717', // neutral-900
+        radiusButton: '0.5rem',
+        radiusCard: '1rem',
+        gradients: {
+            g1: 'rgba(88, 28, 135, 0.2)', // Dark Purple
+            g2: 'rgba(0, 0, 0, 0)',       // Transparent (Void)
+            g3: 'rgba(59, 7, 100, 0.2)',  // Deep Indigo
+        }
+    },
 };
 
 export function generateThemeStyles(profile: Profile): React.CSSProperties {
@@ -86,6 +103,12 @@ export function generateThemeStyles(profile: Profile): React.CSSProperties {
     };
 
     // 4. Generate CSS Variables Object
+    const gradients = (presetFn as any).gradients || {
+        g1: 'rgba(236, 72, 153, 0.4)',
+        g2: 'rgba(99, 102, 241, 0.4)',
+        g3: 'rgba(139, 92, 246, 0.4)',
+    };
+
     return {
         '--primary': config.primary,
         '--primary-rgb': hexToRgb(config.primary),
@@ -95,7 +118,9 @@ export function generateThemeStyles(profile: Profile): React.CSSProperties {
         '--card-foreground': getContrastYIQ(config.cardBg), // Auto-contrast text
         '--radius-button': config.radiusButton,
         '--radius-card': config.radiusCard,
-        // Add other variables here as needed
+        '--gradient-1': gradients.g1,
+        '--gradient-2': gradients.g2,
+        '--gradient-3': gradients.g3,
     } as React.CSSProperties; // Casting to satisfy TypeScript
 }
 
